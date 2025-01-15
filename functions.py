@@ -6,7 +6,7 @@ from dtos import *
 async def create_user(full_name: str, tg_id: int, db):
     db_user = db.query(User).filter(User.tg_id == tg_id).first()
     if db_user is not None:
-        raise HTTPException(status_code=402, detail="User already exists")
+        raise HTTPException(status_code=409, detail="User already exists")
 
     user1 = User(
         tg_id=tg_id,
@@ -14,7 +14,7 @@ async def create_user(full_name: str, tg_id: int, db):
         total_count=0,
         total_coin=0,
         channels="",
-        share_link=f"https://t.me/istigfor_robot?start={tg_id}"
+        share_link=f"https://t.me/Istigfar_bot/Savob?startapp={tg_id}"
     )
     db.add(user1)
     db.commit()
@@ -61,7 +61,7 @@ async def delete_user(tg_id: int, db):
 
     db.delete(db_user)
     db.commit()
-    db.refresh(db_user)
+    # db.refresh(db_user)
     return True
 
 
@@ -103,6 +103,16 @@ async def get_top_users(db):
         top_user.append(user1)
 
     return top_user
+
+
+async def get_all_user_only_id(db):
+    db_users = db.query(User).all()
+    ids = []
+    for user in db_users:
+        id = user.tg_id
+        ids.append(id)
+        
+    return ids
 
 
 async def delete_all_users(db):

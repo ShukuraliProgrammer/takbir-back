@@ -1,10 +1,13 @@
 from sqlalchemy import create_engine, Column, Integer, String, BIGINT, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = "postgresql://takbir_owner:hBNHsClP34TZ@ep-billowing-resonance-a10xp96h.ap-southeast-1.aws.neon.tech/takbir?sslmode=require"
+database = "postgresql://gen_user:E(KuC5gWg%3Ad%25k%5C@82.97.253.124:5432/default_db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(database)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

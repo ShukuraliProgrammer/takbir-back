@@ -1,25 +1,44 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from dtos import UserUpdate, LinkCreate, DarajaCreate, DarajaUpdate
 from functions import create_user, update_user, create_link, delete_link, get_links, create_daraja, update_daraja, \
     delete_daraja, get_all_daraja, get_daraja, get_user_by_tg_id, get_user_by_id, create_friend, my_friend, delete_user, \
     delete_all_links, get_top_users, delete_all_users, delete_friend, my_daraja
 from models import SessionLocal
 
-app = FastAPI()
+app = FastAPI(
+    docs_url="/can-do-crash-me",  # Disables Swagger UI at /docs
+    redoc_url=None, # Disables ReDoc UI at /redoc
+    openapi_url="/openapi.json" # Disables OpenAPI schema at /openapi.json
+    )
 
 origins = [
-    "https://coispace.uz/",
+    # "https://uzfiesta.uz",
+    # "https://takbir-web-app.vercel.app/"
+    "*"
 ]
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,  # Allow all origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
+    allow_methods=["*"],  # Allow all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
 )
+
+# Add Trusted Host middleware
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=["uzfiesta.uz", "api.alehson.uz", "takbir-web-app.vercel.app"],
+)
+
+# Add HTTPS Redirect middleware
+# app.add_middleware(HTTPSRedirectMiddleware)
+
 
 
 def get_db():
@@ -93,6 +112,14 @@ async def top_users(db: Session = Depends(get_db)):
             "data": response
             }
 
+
+@app.get("/get/all/id/user")
+async def get_all_id(db: Session = Depends(get_db)):
+    response = await get_all_user_only_id(db)
+    return {"message": "user's id successfully fetched",
+            "statusCode": 200,
+            "data": response
+            }
 
 @app.delete("/delete/all/users")
 async def all_user_delete(db: Session = Depends(get_db)):
