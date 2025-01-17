@@ -22,6 +22,7 @@ origins = [
 ]
 
 
+# Allow specific hosts or all hosts with "*"
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,  # Allow all origins
@@ -33,7 +34,8 @@ app.add_middleware(
 # Add Trusted Host middleware
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["uzfiesta.uz", "api.alehson.uz", "takbir-web-app.vercel.app"],
+    #allowed_hosts=["uzfiesta.uz", "api.alehson.uz", "takbir-web-app.vercel.app"],
+    allowed_hosts=["*"]
 )
 
 # Add HTTPS Redirect middleware
