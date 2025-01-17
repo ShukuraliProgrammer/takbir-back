@@ -5,7 +5,14 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-database = "postgresql://gen_user:E(KuC5gWg%3Ad%25k%5C@82.97.253.124:5432/default_db"
+
+POSTGRES_USER = os.getenv('POSTGRES_USER')
+POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+POSTGRES_DB = os.getenv('POSTGRES_DB')
+POSTGRES_HOST = os.getenv('POSTGRES_HOST')
+POSTGRES_PORT = os.getenv('POSTGRES_PORT')
+
+database = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 engine = create_engine(database)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
