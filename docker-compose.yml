@@ -3,6 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:15.2
+    container_name: takbir_backend_db
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -16,6 +17,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: takbir_backend_web
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -33,6 +35,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.nginx
+    container_name: takbir_backend_nginx
     ports:
       - "80:80"
       - "443:443"
